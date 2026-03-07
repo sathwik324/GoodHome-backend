@@ -7,6 +7,7 @@ import channelRoutes from "./routes/channel.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import groupRoutes from "./routes/group.routes.js";
 import mediaRoutes from "./routes/media.routes.js";
+import authMiddleware from "./middleware/auth.middleware.js";
 
 const app = express();
 
@@ -21,8 +22,8 @@ app.use("/api/members", memberRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/channels", channelRoutes);
 app.use("/api/dashboard", dashboardRoutes);
-app.use("/api/groups", groupRoutes);
-app.use("/api/media", mediaRoutes);
+app.use('/api/groups', authMiddleware, groupRoutes);
+app.use('/api/media', authMiddleware, mediaRoutes);
 
 app.get("/maggi", (req, res) => {
   res.json({ status: "GoodHome API running" });

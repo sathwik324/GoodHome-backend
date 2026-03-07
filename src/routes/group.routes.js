@@ -5,28 +5,24 @@ import Group from "../models/Group.js";
 const router = express.Router();
 
 // POST /api/groups/create
-router.post("/create", async (req, res) => {
+router.post('/create', async (req, res) => {
     try {
         const { name, description } = req.body;
+        if (!name) return res.status(400).json({ message: 'Group name is required' });
 
-        if (!name) {
-            return res.status(400).json({ message: "Name is required" });
-        }
-
-        const inviteCode = crypto.randomBytes(4).toString('hex');
-
-        const group = await Group.create({
+        const group = new Group({
             name,
-            description,
+            description: description || '',
             owner: req.userId,
-            members: [req.userId],
-            inviteCode,
+            members: [req.userId]
         });
 
+        await group.save();
+        console.log('Group created:', group._id);
         res.status(201).json(group);
     } catch (err) {
-        console.error('Error in POST /api/groups/create:', err);
-        return res.status(500).json({ message: err.message });
+        console.error('Error creating group:', err);
+        res.status(500).json({ message: err.message });
     }
 });
 

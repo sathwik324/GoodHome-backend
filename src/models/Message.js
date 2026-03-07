@@ -7,6 +7,11 @@ const messageSchema = new mongoose.Schema(
             ref: "Channel",
             required: true,
         },
+        groupId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Group",
+            required: true,
+        },
         sender: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
